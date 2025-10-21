@@ -1,5 +1,7 @@
 # Anwendungsspezifische Reinforcement-Learning Ansätze
 
+This is the seminar-specific readme. For details on the zoo, please see the [original readme](zoo/README.md).
+
 ## Setup Stable-Baselines3-Zoo (Docker)
 
 ### Clone the repo (including submodules with trained agents)
