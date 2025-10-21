@@ -26,6 +26,8 @@ def plot_train():
     parser.add_argument("-x", "--x-axis", help="X-axis", choices=["steps", "episodes", "time"], type=str, default="steps")
     parser.add_argument("-y", "--y-axis", help="Y-axis", choices=["success", "reward", "length"], type=str, default="reward")
     parser.add_argument("-w", "--episode-window", help="Rolling window size", type=int, default=100)
+    parser.add_argument("--no-display", action="store_true", help="Do not display the plot")
+    parser.add_argument("--file_name", type=str, default="train_plot.png", help="File name to save the plot")
 
     args = parser.parse_args()
 
@@ -88,7 +90,9 @@ def plot_train():
 
     plt.legend()
     plt.tight_layout()
-    plt.show()
+    if not args.no_display:
+        plt.show()
+    plt.savefig(args.file_name)
 
 
 if __name__ == "__main__":

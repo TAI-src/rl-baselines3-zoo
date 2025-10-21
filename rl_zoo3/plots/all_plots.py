@@ -37,6 +37,7 @@ def all_plots():  # noqa: C901
     parser.add_argument(
         "-print", "--print-n-trials", action="store_true", default=False, help="Print the number of trial for each result"
     )
+    parser.add_argument("--file_name", help="File name to save the figure", type=str, default="all_results.png")
     args = parser.parse_args()
 
     # Activate seaborn
@@ -243,6 +244,7 @@ def all_plots():  # noqa: C901
 
     if not args.no_display:
         plt.show()
+    plt.savefig(args.file_name)
 
 
 if __name__ == "__main__":
