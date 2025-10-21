@@ -6,9 +6,9 @@ TAG=stablebaselines/rl-baselines3-zoo
 VERSION=$(cat ./rl_zoo3/version.txt)
 
 if [[ ${USE_GPU} == "True" ]]; then
-  PARENT="${PARENT}:${VERSION}"
+  PARENT="${PARENT}"
 else
-  PARENT="${PARENT}-cpu:${VERSION}"
+  PARENT="${PARENT}-cpu"
   TAG="${TAG}-cpu"
 fi
 
