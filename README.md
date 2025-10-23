@@ -98,7 +98,7 @@ A rough example report can be found in [`seminar/example_report.md`](seminar/exa
 
 ### Practical concerns
 
-Training RL agents can be quite time consuming. Make sure to plan accordingly and consider using a machine with a dedicated GPU if possible (and then use the GPU versions of the scripts). Some thoughts to potentially reduce training time:
+Training RL agents can be quite time consuming. Make sure to plan accordingly and consider using a machine with a dedicated GPU if possible (and then use the GPU versions of the scripts - as of yet untested, though). Some thoughts to potentially reduce training time:
 
 * The exact choice of timesteps depends on the setting. It makes sense to:
   * Start with a lower number of timesteps to quickly test if everything works as intended.
