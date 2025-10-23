@@ -33,7 +33,7 @@ In its gymnasium implementation (default version), it has the following properti
 
 ## Tailoring experiments
 
-The default hyperparameters are taken from [rl-zoo](hyperparams/ppo.yml) for atari. They are:
+The default hyperparameters are taken from [rl-zoo](../hyperparams/ppo.yml) for atari. They are:
 
 ```yml
 atari:
@@ -52,7 +52,7 @@ atari:
   ent_coef: 0.01
 ```
 
-They are loaded from [experiments/def_ppo_pac.yml].
+They are loaded from [experiments/def_ppo_pac.yml](experiments/def_ppo_pac.yml).
 
 If not otherwise specified, all experiments are run using the [training interface](utils/train_custom.py) with:
 
@@ -100,7 +100,7 @@ Currently, the player only receives rewards for collected objects. However, I no
 
 (training figures. This is a pretend scenario)
 
-In order to encourage evading ghosts, even if no pellets are in the region, I implemented an additional reward of 1 at every timestep. This is implemented in [wrapper/longevity_wrapper.py], with a corresponding [config_file](experiments/logevity_ppo_pac.yml).
+In order to encourage evading ghosts, even if no pellets are in the region, I implemented an additional reward of 1 at every timestep. This is implemented in [wrapper/longevity_wrapper.py], with a corresponding config_file [experiments/logevity_ppo_pac.yml].
 
 ```
 python utils/train_custom.py --env MsPacmanNoFrameskip-v4 --conf experiments/longevity_ppo_pac.yml
