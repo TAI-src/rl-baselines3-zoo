@@ -63,6 +63,7 @@ You can run training using the provided training scripts. This will make it easi
 
 ```bash
 ./scripts/run_docker_cpu.sh bash
+cd /seminar
 python utils/train_custom.py --env PongNoFrameskip-v4 --algo a2c --conf experiments/sample_experiment_a2c.yml --seed 1337
 ```
 
@@ -74,12 +75,13 @@ After training, you can plot the training progress using the provided plotting s
 
 ```bash
 ./scripts/run_docker_cpu.sh bash
+cd /seminar
 python -m rl_zoo3.plots.plot_train --algo a2c --env PongNoFrameskip-v4 --exp-folder logs/ --file_name a2c_sample_plot_train.png
 ```
 
 This will generate a plot of the training progress and save them in the current directory with the given name. It will include multiple results runs if they exist.
 
-## Plot evaluation results
+### Plot evaluation results
 
 When training with the script, the agents are intermittently evaluated using an EvaluationCallback. The results of these evaluations are saved in the `logs/` directory as well. You can plot these evaluation results using the following command:
 
@@ -89,3 +91,65 @@ python -m rl_zoo3.plots.all_plots --algo a2c --env PongNoFrameskip-v4 --exp-fold
 ```
 
 This will generate a plot including confidence intervals for the evaluation results and save it in the current directory with the given name. It will include multiple results runs if they exist.
+
+## Experiment tips and tricks
+
+A rough example report can be found in [`seminar/example_report.md`](seminar/example_report.md).
+
+### Practical concerns
+
+Training RL agents can be quite time consuming. Make sure to plan accordingly and consider using a machine with a dedicated GPU if possible (and then use the GPU versions of the scripts). Some thoughts to potentially reduce training time:
+
+* The exact choice of timesteps depends on the setting. It makes sense to:
+  * Start with a lower number of timesteps to quickly test if everything works as intended.
+  * Once everything works, increase the number of timesteps to a point that makes sense (either due to training duration, or, ideally, because the training converges).
+  * Then use that number of timesteps for all experiments to ensure comparability.
+* Consider using a compatible pre-trained agent as a starting point. This can significantly reduce training time.
+
+### Repeatability and reproducability
+
+To ensure repeatability, please ensure that all commands, seeds and package versions are documented. The complete results (including logs) should also be saved alongside the report and made available.
+
+The rl-zoo also provides an integration to [wandb](https://wandb.ai/) for experiment tracking as well as tensorboard logging. For more details see the [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/integrations.html). You are definitely welcome and encouraged to use these tools for your experiments. I will also provide support where I can, but won't provide a full tutorial on these tools.
+
+### Multiple repeats
+
+All plotting scripts automatically find all data in the passed folder that matches the passed algorithm and environment. So the training could just be repeated multiple times with different seeds and the results would be aggregated in the plots. This is needed to be able to show appropriate confidence intervals.
+
+At least 30 times
+
+```
+python utils/train_custom.py --env PongNoFrameskip-v4 --algo a2c --conf experiments/v1.yml --seed seeds[i]
+```
+
+where `seeds` is a list of different seed values and `i` ranges from 0 to 29.
+
+The plotting script automatically increments the folder names, so the results show up in folder `{logs}/{algo}/{env}_i` where i is the run index. When passing the algorithm and env to the plotting script, all the results are incorporated as intended.
+
+### Comparing across versions of the same environment
+
+:alert: The plot scripts all find the relevant data by comparing the directory names. Passing the algorithm and env command line parameters thus causes the script to include data found in the folder in `{logs}/{algor}/{env}_i`. Therefore, if we want to test slight variations of the environment, we can simply rename the folders.
+
+Let's say we have to versions of our experiments. Both have the same algorithm (a2c) and the same environment (PongNoFrameskip-v4), but one uses a custom wrapper that modifies the reward structure. This is specified in a different config file. Then, I could:
+
+Run first version first (30 times)
+
+```
+python utils/train_custom.py --env PongNoFrameskip-v4 --algo a2c --conf experiments/v1.yml --seed 1337 
+```
+
+Then rename all created folders from `logs/a2c/PongNoFrameskip-v4_i` to `logs/a2c/PongNoFrameskipV1-v4_i` (where i is the run index).
+
+Then run the second version (30 times)
+
+```
+python utils/train_custom.py --env PongNoFrameskip-v4 --algo a2c --conf experiments/v2.yml --seed 1337 
+```
+
+Then rename all created folders from `logs/a2c/PongNoFrameskip-v4_i` to `logs/a2c/PongNoFrameskipV2-v4_i` (where i is the run index).
+
+Now we can use `PongNoFrameskipV1-v4` and `PongNoFrameskipV2-v4` as environment names to compare the two versions in the plot scripts.
+
+### Exchange ideas and code
+
+The marks for this seminar are individually awarded, but they mainly are about defining the ideas for tailoring and their presentation (in the talk and in the report). So, as long as you disclose it, I think it makes a lot of sense to share code, especially for additional tools such as plotting scripts, or even wrappers that you think others might find useful. Just make sure to give credit where credit is due.
