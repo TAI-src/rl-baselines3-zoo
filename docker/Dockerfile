@@ -12,6 +12,28 @@ RUN apt-get -y update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+    libxkbcommon-x11-0 \
+    libxcb-xinerama0 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-render-util0 \
+    libxcb-shape0 \
+    libxcb-randr0 \
+    libxcb-render0 \
+    libxcb-shm0 \
+    libxcb-sync1 \
+    libxcb-xfixes0 \
+    libxcb-xinerama0 \
+    libxcb-xkb1 \
+    libxrender1 \
+    libxext6 \
+    libsm6 \
+    libx11-xcb1 \
+    qtbase5-dev
+
+
 USER $MAMBA_USER
 
 ENV CODE_DIR=/home/$MAMBA_USER/code
@@ -32,5 +54,6 @@ RUN \
     uv pip install --system -r /tmp/requirements.txt && \
     uv pip install --system -e ".[plots,tests]" && \
     uv cache clean
+
 
 CMD /bin/bash
